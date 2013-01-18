@@ -1,0 +1,4 @@
+- Add commas in to_s
+- .set_defaults({}) to provide default values for constructors
+- Want to use fun "Status < Hamsterdam::Struct(:one, :two)" but something is wrong with inheritance of field_names that blows up the flesh_out func.
+- FIXED: Symbol/string insensitivity (use symbols internally and when listing field names, but accept :foo and 'foo' when constructing and merging

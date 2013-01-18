@@ -47,6 +47,22 @@ describe "Hamsterdam structures" do
     it "raises helpful error when constructed with invalid objects" do
       lambda do struct_class.new("LAWDY") end.should raise_error /Do not want.*LAWDY/
     end
+
+    # describe "inheritance-based definition" do
+    #   class Castle < Hamsterdam::Struct(:gate, :mote, :walls)
+    #     def tally
+    #       gate + mote + walls
+    #     end
+    #   end
+
+    #   it "provides convenient syntax for deriving classes from immutable struct def" do
+    #     c = Castle.new gate: 2, mote: 1, walls: 4
+    #     c.gate.should == 2
+    #     c.mote.should == 1
+    #     c.walls.should == 4
+    #     c.tally.should == 7
+    #   end
+    # end
   end
 
   describe "equality" do
@@ -157,10 +173,37 @@ describe "Hamsterdam structures" do
     end
 
     it "does a nice job with Hamster Lists, Sets, and Hashes" do
-      thinger = Hamstest::Thinger.new a_hash: Hamster.hash(red: "fish"), a_set: Hamster.set(42,37), a_list: Hamster.list(:oh, :the, :things)
-      expected = "<Thinger a_hash: {:red => \"fish\"} a_set: {42, 37} a_list: [:oh, :the, :things]>"
+      thinger = Hamstest::Thinger.new a_hash: Hamster.hash(red: "fish"), a_set: Hamster.set(42), a_list: Hamster.list(:oh, :the, :things)
+      expected = "<Thinger a_hash: {:red => \"fish\"} a_set: {42} a_list: [:oh, :the, :things]>"
       thinger.inspect.should == expected
       thinger.to_s.should == expected
+    end
+  end
+
+  describe "symbol/string insensitivity" do
+    let(:mixed_up) { Hamsterdam::Struct.define(:foo, 'bar') }
+
+    it "lets you define the field names using a mix of string and symbols" do
+      val = mixed_up.new(foo: 1, bar: 2)
+      val.foo.should == 1
+      val.bar.should == 2
+      val = val.set_foo(3)
+      val.foo.should == 3
+    end
+
+    it "lets you construct new values using a mix of strings and symbols" do
+      val = mixed_up.new("foo" => 1, :bar => 2)
+      val.foo.should == 1
+      val.bar.should == 2
+    end
+
+    it "lets you merge values using a mix of strings and symbols" do
+      val = mixed_up.new("foo" => 1, :bar => 2)
+      val.foo.should == 1
+      val.bar.should == 2
+      val = val.merge(:foo => 3, "bar" => 4)
+      val.foo.should == 3
+      val.bar.should == 4
     end
   end
 end

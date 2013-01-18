@@ -6,6 +6,7 @@ module Hamsterdam
   class Struct
     def self.define(*field_names)
       struct_class = Class.new(Hamsterdam::Struct) do
+        field_names = field_names.map &:to_sym
         field_names.each do |fname|
           define_method fname do 
             return @data[fname]
@@ -89,6 +90,7 @@ module Hamsterdam
 
     def flesh_out(data)
       fnames = self.class.field_names
+      data = symbolize_keys(data)
       miss = fnames - data.keys
       if miss.any?
         return miss.inject(data) { |h,name| h.put(name,nil) }
@@ -97,5 +99,14 @@ module Hamsterdam
       end
     end
 
+    def symbolize_keys(data)
+      data.reduce(data) do |memo,k,v|
+        if Symbol === k
+          memo
+        else
+          memo.delete(k).put(k.to_sym, v)
+        end
+      end
+    end
   end
 end
