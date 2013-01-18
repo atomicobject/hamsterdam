@@ -55,11 +55,34 @@ describe "Hamsterdam structures" do
         s1.should == s2
       end
 
+      it "considers two structs NOT equal if they have the different field values" do
+        s1 = struct_class.new(top: 50, bottom: 75)
+        s2 = struct_class.new(top: 50, bottom: 74)
+        s3 = struct_class.new(top: 51, bottom: 75)
+
+        s1.eql?(s2).should_not == true
+        (s1 == s2).should_not == true
+        s1.should_not == s2
+
+        s1.eql?(s3).should_not == true
+        (s1 == s3).should_not == true
+        s1.should_not == s3
+      end
+
       it "doesn't consider to structs eql? unless they are same class" do
         s1 = struct_class.new(top: 50, bottom: 75)
         s2 = define_hamsterdam_struct(:top, :bottom).new(top:50, bottom:75)
         s1.eql?(s2).should == false
         (s1 == s2).should == true # should still be ==
+      end
+
+      it "considers equal two structs if one has missing keys, and the other has nil values for those keys" do
+        s1 = struct_class.new(top: 50, bottom: nil)
+        s2 = struct_class.new(top: 50)
+        #binding.pry
+        s1.eql?(s2).should == true
+        (s1 == s2).should == true
+        s1.should == s2
       end
     end
 

@@ -1,3 +1,5 @@
+require 'hamster'
+
 module Hamsterdam
   VERSION = "1.0.0"
 
@@ -26,7 +28,7 @@ module Hamsterdam
     end
 
     def initialize(values=Hamster.hash)
-      @data = ensure_hamster_hash(values)
+      @data = flesh_out(ensure_hamster_hash(values))
       validate_keys(@data)
     end
 
@@ -50,7 +52,6 @@ module Hamsterdam
       @data
     end
 
-
     private
     def validate_keys(data)
       valid_keys = self.class.field_names
@@ -68,6 +69,16 @@ module Hamsterdam
         h
       else
         raise "Expected Hash or Hamster::Hash. Do not want: #{h.inspect}"
+      end
+    end
+
+    def flesh_out(data)
+      fnames = self.class.field_names
+      miss = fnames - data.keys
+      if miss.any?
+        return miss.inject(data) { |h,name| h.put(name,nil) }
+      else
+        return data
       end
     end
 

@@ -1,4 +1,4 @@
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in conject.gemspec
+# Deps are in hamsterdam.gemspec
 gemspec

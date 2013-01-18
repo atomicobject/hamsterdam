@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+$LOAD_PATH << File.expand_path(File.dirname(__FILE__) + "/lib")
 require File.expand_path('../lib/hamsterdam', __FILE__)
 
 Gem::Specification.new do |gem|
@@ -15,6 +16,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = Hamsterdam::VERSION
 
+  gem.add_dependency "hamster"
   gem.add_development_dependency "rake"
   gem.add_development_dependency "rspec"
   gem.add_development_dependency "simplecov"
