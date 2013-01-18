@@ -1,6 +1,6 @@
 # Hamsterdam #
 
-Immutable Struct-like record structures based on Hamster's immutable Hashes.  Convenient methods for updating record structures and returning new immutable instances.
+Immutable Struct-like record structures based on Hamster's (https://github.com/harukizaemon/hamster) immutable Hashes.  Convenient methods for updating record structures and returning new immutable instances.
 
 # Example #
 
