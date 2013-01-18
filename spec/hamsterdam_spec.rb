@@ -48,21 +48,21 @@ describe "Hamsterdam structures" do
       lambda do struct_class.new("LAWDY") end.should raise_error /Do not want.*LAWDY/
     end
 
-    # describe "inheritance-based definition" do
-    #   class Castle < Hamsterdam::Struct(:gate, :mote, :walls)
-    #     def tally
-    #       gate + mote + walls
-    #     end
-    #   end
+    describe "inheritance-based definition" do
+      class Castle < Hamsterdam::Struct(:gate, :mote, :walls)
+        def tally
+          gate + mote + walls
+        end
+      end
 
-    #   it "provides convenient syntax for deriving classes from immutable struct def" do
-    #     c = Castle.new gate: 2, mote: 1, walls: 4
-    #     c.gate.should == 2
-    #     c.mote.should == 1
-    #     c.walls.should == 4
-    #     c.tally.should == 7
-    #   end
-    # end
+      it "provides convenient syntax for deriving classes from immutable struct def" do
+        c = Castle.new gate: 2, mote: 1, walls: 4
+        c.gate.should == 2
+        c.mote.should == 1
+        c.walls.should == 4
+        c.tally.should == 7
+      end
+    end
   end
 
   describe "equality" do

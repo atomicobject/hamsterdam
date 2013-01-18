@@ -1,7 +1,11 @@
 require 'hamster'
 
 module Hamsterdam
-  VERSION = "1.0.1"
+  VERSION = "1.0.2"
+
+  def self.Struct(*field_names)
+    Hamsterdam::Struct.define(*field_names)
+  end
 
   class Struct
     def self.define(*field_names)
@@ -23,10 +27,18 @@ module Hamsterdam
       struct_class.instance_variable_set(:@field_names_list, Hamster.list(*field_names))
       class << struct_class 
         def field_names
-          @field_names
+          if !@field_names.nil?
+            @field_names
+          else
+            superclass.field_names
+          end
         end
         def field_names_list
-          @field_names_list
+          if !@field_names_list.nil?
+            @field_names_list
+          else
+            superclass.field_names_list
+          end
         end
       end
       struct_class
@@ -89,6 +101,7 @@ module Hamsterdam
     end
 
     def flesh_out(data)
+      # binding.pry
       fnames = self.class.field_names
       data = symbolize_keys(data)
       miss = fnames - data.keys
