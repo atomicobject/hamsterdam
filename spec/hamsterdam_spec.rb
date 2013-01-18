@@ -204,6 +204,8 @@ describe "Hamsterdam structures" do
       val = val.merge(:foo => 3, "bar" => 4)
       val.foo.should == 3
       val.bar.should == 4
+
+      val.to_hamster_hash.should == Hamster.hash(foo: 3, bar: 4)
     end
   end
 end
