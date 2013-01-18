@@ -1,0 +1,2 @@
+class BulletCoordinator
+end

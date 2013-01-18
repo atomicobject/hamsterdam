@@ -1,0 +1,7 @@
+Developing Acceptance Tests
+
+This suite contains acceptance tests for features that are
+UNDER DEVELOPMENT.
+
+Once the features are complete, the test must be moved
+into the "regression" peer directory.

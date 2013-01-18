@@ -1,0 +1,2 @@
+class Nails
+end

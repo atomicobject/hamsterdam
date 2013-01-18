@@ -1,0 +1,2 @@
+class KillEmAll
+end

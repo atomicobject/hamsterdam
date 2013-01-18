@@ -1,0 +1,12 @@
+Regression Acceptance Tests
+
+This suite ensures that all defined features remain functional.  Only
+acceptance tests that are expected to ALWAYS PASS should live here.
+
+Tests that are NOT FINISHED, or are failing because their targeted
+features are UNDER DEVELOPMENT, go in the "dev" directory parallel to
+this "regression" dir.
+
+This applies to acceptance tests that are being redressed, or
+whose target features are back under actual development.
+

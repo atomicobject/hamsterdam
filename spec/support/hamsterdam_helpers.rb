@@ -1,0 +1,3 @@
+module HamsterdamHelpers
+  # 
+end

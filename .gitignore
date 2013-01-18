@@ -1,0 +1,7 @@
+/coverage
+tags
+*.swp
+*.swo
+pkg
+/README.html
+Gemfile.lock

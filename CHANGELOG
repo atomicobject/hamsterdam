@@ -1,0 +1,5 @@
+Hamsterdam v1.0.0
+  * Can define immutable record types via Hamsterdam::Struct.define(*field_names)
+	* Provides getters for all fields, and set_* transformers that return the updated version of the record.
+	* Handy merge function for updating one or more fields by name
+	* Wraps Hamaster's (https://github.com/harukizaemon/hamster) immutable Hamster::Hash class
