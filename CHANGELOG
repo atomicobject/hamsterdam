@@ -1,3 +1,7 @@
+Hamsterdam v1.0.1
+  * Added nice to_s and inspect
+	* Also storing .field_names_list as another way of getting field names of a struct, but retaining order of declaration (.field_names is a Hamster.set, .field_names_list is a Hamster.list)
+
 Hamsterdam v1.0.0
   * Can define immutable record types via Hamsterdam::Struct.define(*field_names)
 	* Provides getters for all fields, and set_* transformers that return the updated version of the record.

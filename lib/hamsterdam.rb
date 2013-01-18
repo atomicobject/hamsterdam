@@ -1,7 +1,7 @@
 require 'hamster'
 
 module Hamsterdam
-  VERSION = "1.0.0"
+  VERSION = "1.0.1"
 
   class Struct
     def self.define(*field_names)
@@ -19,9 +19,13 @@ module Hamsterdam
       end
 
       struct_class.instance_variable_set(:@field_names, Hamster.set(*field_names))
+      struct_class.instance_variable_set(:@field_names_list, Hamster.list(*field_names))
       class << struct_class 
         def field_names
           @field_names
+        end
+        def field_names_list
+          @field_names_list
         end
       end
       struct_class
@@ -50,6 +54,17 @@ module Hamsterdam
 
     def to_hamster_hash
       @data
+    end
+
+    def inspect
+      to_s
+    end
+
+    def to_s
+      name = self.class.name.split(/::/).last
+      data = to_hamster_hash
+      fields = self.class.field_names_list.map { |fname| "#{fname}: #{data[fname].inspect}" }
+      "<#{([name]+fields).join(" ")}>"
     end
 
     private

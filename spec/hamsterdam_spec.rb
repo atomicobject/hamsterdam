@@ -132,4 +132,35 @@ describe "Hamsterdam structures" do
     end
   end
 
+  describe "inspect and to_s" do
+    module Hamstest
+      Wheel = Hamsterdam::Struct.define(:x,:y,:radius,:label)
+      Vehicle = Hamsterdam::Struct.define(:wheels, :body_style)
+      Thinger = Hamsterdam::Struct.define(:a_hash, :a_set, :a_list)
+    end
+
+
+    it "generates a nice clear string representation of the internal data" do
+      wheel = Hamstest::Wheel.new x: 50, y: 100, radius: 5.0, label: "front"
+      expected = "<Wheel x: 50 y: 100 radius: 5.0 label: \"front\">"
+      wheel.inspect.should == expected
+      wheel.to_s.should == expected
+    end
+
+    it "does a nice job with other Hamsterdam structs" do
+      wheel1 = Hamstest::Wheel.new x: 50, y: 100, radius: 5.0, label: "front"
+      wheel2 = Hamstest::Wheel.new x: 100, y: 100, radius: 5.0, label: "back"
+      car = Hamstest::Vehicle.new wheels: Hamster.list(wheel1, wheel2), body_style: "sedan"
+      expected = "<Vehicle wheels: [<Wheel x: 50 y: 100 radius: 5.0 label: \"front\">, <Wheel x: 100 y: 100 radius: 5.0 label: \"back\">] body_style: \"sedan\">"
+      car.inspect.should == expected
+      car.to_s.should == expected
+    end
+
+    it "does a nice job with Hamster Lists, Sets, and Hashes" do
+      thinger = Hamstest::Thinger.new a_hash: Hamster.hash(red: "fish"), a_set: Hamster.set(42,37), a_list: Hamster.list(:oh, :the, :things)
+      expected = "<Thinger a_hash: {:red => \"fish\"} a_set: {42, 37} a_list: [:oh, :the, :things]>"
+      thinger.inspect.should == expected
+      thinger.to_s.should == expected
+    end
+  end
 end
