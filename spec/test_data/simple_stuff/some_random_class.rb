@@ -1,2 +1,0 @@
-class SomeRandomClass
-end

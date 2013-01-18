@@ -1,2 +1,0 @@
-class Tv
-end
