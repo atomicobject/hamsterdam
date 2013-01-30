@@ -1,3 +1,7 @@
+Hamsterdam v1.0.3
+  * Setters return the same instance of the object if the value being set is unchanged
+  * Optimized creation of a new struct caused by a setter modification by skipping validation
+
 Hamsterdam v1.0.2
   * Field name defs, constructor keys and merge keys are now stringified internally to prevent string/symbol mismatching
   * Added syntax helper for this kind of thing: class Castle < Hamsterdam::Struct(:gate, :walls)
