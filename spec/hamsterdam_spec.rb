@@ -121,6 +121,11 @@ describe "Hamsterdam structures" do
       struct.bottom.should == 1
     end
 
+    it "returns the same struct if a set does not change the value" do
+      struct = struct_class.new(top: 25, bottom: 2)
+      struct.set_top(25).set_bottom(2).should equal(struct)
+    end
+
     it "provides a merge function" do
       struct = struct_class.new(top: 10, bottom: 1)
 
@@ -146,6 +151,7 @@ describe "Hamsterdam structures" do
       struct.top.should == 10
       struct.bottom.should == 1
     end
+
   end
 
   describe "inspect and to_s" do

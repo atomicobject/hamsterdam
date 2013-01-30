@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 $LOAD_PATH << File.expand_path(File.dirname(__FILE__) + "/lib")
-require File.expand_path('../lib/hamsterdam', __FILE__)
+require "hamsterdam/version"
 
 Gem::Specification.new do |gem|
   gem.authors       = ["David Crosby"]
@@ -9,9 +9,8 @@ Gem::Specification.new do |gem|
   gem.summary       = %q{Immutable Struct-like record structures based on Hamster.}
   gem.homepage      = "https://github.com/atomicobject/hamsterdam"
 
-  gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
-  gem.files         = `git ls-files`.split("\n") - [".gitignore", ".rspec", ".rvmrc", "NOTES.txt", "TODO"]
-  gem.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
+  gem.files         = Dir["lib/**/*.rb"]
+  gem.test_files    = Dir["spec/**/*.rb"]
   gem.name          = "hamsterdam"
   gem.require_paths = ["lib"]
   gem.version       = Hamsterdam::VERSION

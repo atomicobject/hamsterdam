@@ -1,7 +1,6 @@
 require 'hamster'
 
 module Hamsterdam
-  VERSION = "1.0.2"
 
   def self.Struct(*field_names)
     Hamsterdam::Struct.define(*field_names)
@@ -13,11 +12,15 @@ module Hamsterdam
         field_names = field_names.map &:to_sym
         field_names.each do |fname|
           define_method fname do 
-            return @data[fname]
+            @data[fname]
           end
 
           define_method "set_#{fname}" do |value|
-            self.class.new(@data.put(fname, value))
+            if @data[fname] == value
+              self
+            else
+              self.class.new(@data.put(fname, value), false)
+            end
           end
         end
 
@@ -44,9 +47,13 @@ module Hamsterdam
       struct_class
     end
 
-    def initialize(values=Hamster.hash)
-      @data = flesh_out(ensure_hamster_hash(values))
-      validate_keys(@data)
+    def initialize(values=Hamster.hash, validate=true)
+      if validate
+        @data = flesh_out(ensure_hamster_hash(values))
+        validate_keys(@data)
+      else
+        @data = values
+      end
     end
 
     def merge(values)
@@ -74,7 +81,7 @@ module Hamsterdam
     end
 
     def to_s
-      name = self.class.name.split(/::/).last
+      name = self.class.name ? self.class.name.split(/::/).last : self.class.to_s
       data = to_hamster_hash
       fields = self.class.field_names_list.map { |fname| "#{fname}: #{data[fname].inspect}" }
       "<#{([name]+fields).join(" ")}>"
