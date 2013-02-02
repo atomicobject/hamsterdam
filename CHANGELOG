@@ -1,7 +1,7 @@
-Hamsterdam v1.0.4
+Hamsterdam v1.0.5
   * Setters return the same instance of the object if the value being set is unchanged
   * Optimized creation of a new struct caused by a setter modification by skipping validation
-	* (v1.0.3 skipped because of github repo tagging conflict)
+	* (v1.0.3 and 1.0.4 skipped because of github repo tagging conflict)
 
 Hamsterdam v1.0.2
   * Field name defs, constructor keys and merge keys are now stringified internally to prevent string/symbol mismatching
