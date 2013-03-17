@@ -8,6 +8,7 @@ describe "Hamsterdam structures" do
   let(:struct_class) { define_hamsterdam_struct(:top, :bottom) }
 
   describe "Struct.define" do
+    puts Hamsterdam.internal_hash_class
 
     it "creates a structure class based on the given fields" do
       struct = struct_class.new(top: 200, bottom: "all the way down")
@@ -16,8 +17,8 @@ describe "Hamsterdam structures" do
       struct.bottom.should == "all the way down"
     end
 
-    it "can be built with Hamster hashes" do
-      struct = struct_class.new(Hamster.hash(top: 10, bottom: "low"))
+    it "can be built with underlying persistent data structure hashes hashes" do
+      struct = struct_class.new(Hamsterdam.from_ruby_hash(top: 10, bottom: "low"))
       struct.should be
       struct.top.should == 10
       struct.bottom.should == "low"
@@ -39,9 +40,9 @@ describe "Hamsterdam structures" do
       struct.bottom.should be_nil
     end
 
-    it "provides access to the internal data as a Hamster.hash" do
+    it "provides access to the internal data as the correct hash type" do
       s1 = struct_class.new(top: 50, bottom: 75)
-      s1.to_hamster_hash.should == Hamster.hash(top: 50, bottom: 75)
+      s1.internal_hash.should == Hamsterdam.from_ruby_hash(top: 50, bottom: 75)
     end
 
     it "raises helpful error when constructed with invalid objects" do
@@ -98,16 +99,16 @@ describe "Hamsterdam structures" do
     it "considers equal two structs if one has missing keys, and the other has nil values for those keys" do
       s1 = struct_class.new(top: 50, bottom: nil)
       s2 = struct_class.new(top: 50)
-      #binding.pry
+      # binding.pry
       s1.eql?(s2).should == true
       (s1 == s2).should == true
       s1.should == s2
     end
   end
 
-  it "uses the same #hash as Hamster::Hash" do
+  it "uses the same #hash as the underlying data structure" do
     s1 = struct_class.new(top: 50, bottom: 75)
-    s1.hash.should == Hamster.hash(top:50, bottom:75).hash
+    s1.hash.should == Hamsterdam.from_ruby_hash(top:50, bottom:75).hash
   end
 
   describe "transformation" do
@@ -141,10 +142,10 @@ describe "Hamsterdam structures" do
       struct3.bottom.should == "very"
     end
 
-    it "can merge-in Hamster::Hash" do
+    it "can merge-in a non-ruby hash" do
       struct = struct_class.new(top: 10, bottom: 1)
 
-      struct2 = struct.merge(Hamster.hash(bottom: "newer", top: "newest"))
+      struct2 = struct.merge(Hamsterdam.from_ruby_hash(bottom: "newer", top: "newest"))
       struct2.top.should == "newest"
       struct2.bottom.should == "newer"
 
@@ -211,7 +212,7 @@ describe "Hamsterdam structures" do
       val.foo.should == 3
       val.bar.should == 4
 
-      val.to_hamster_hash.should == Hamster.hash(foo: 3, bar: 4)
+      val.internal_hash.should == Hamsterdam.from_ruby_hash(foo: 3, bar: 4)
     end
   end
 end

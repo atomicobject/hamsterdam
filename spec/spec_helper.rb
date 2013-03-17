@@ -11,9 +11,14 @@ end
 
 #ENV["APP_ENV"] = "rspec"
 
+require 'pry'
 require 'hamsterdam'
 
-require 'pry'
+if ENV['clj'] == 'true'
+  require "#{PROJECT_ROOT}/spec/jars/clojure-1.5.1.jar"
+  require 'hamsterdam/clj'
+end
+
 
 # Load all support files
 Dir["#{PROJECT_ROOT}/spec/support/*.rb"].each do |support|

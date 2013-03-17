@@ -21,5 +21,12 @@ begin # protect from missing rspec
     end
     Rake::Task["_tmp_rspec"].invoke
   end
+
+  desc "Run specs using clojure data structures internally"
+  task "spec:clj" do
+    ENV['clj'] = 'true'
+    Rake::Task["spec"].invoke
+  end
+
 rescue Exception => e
 end

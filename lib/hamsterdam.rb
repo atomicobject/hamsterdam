@@ -2,8 +2,80 @@ require 'hamster'
 
 module Hamsterdam
 
+  module Hamster
+    def self.from_ruby_hash(h)
+      ::Hamster.hash(h)
+    end
+
+    def self.internal_hash_class
+      ::Hamster::Hash
+    end
+
+    def self.empty_hash
+      ::Hamster.hash
+    end
+
+    def self.empty_set
+      ::Hamster.set
+    end
+
+    def self.empty_list
+      ::Hamster.list
+    end
+
+    def self.equal_hashes?(hash1, hash2)
+      hash1 == hash2
+    end
+
+    def self.symbolize_keys(hash)
+      hash.reduce(hash) do |memo,k,v|
+        if Symbol === k
+          memo
+        else
+          memo.delete(k).put(k.to_sym, v)
+        end
+      end
+    end
+  end
+
   def self.Struct(*field_names)
     Hamsterdam::Struct.define(*field_names)
+  end
+
+  def self.internals=(mod)
+    @internal_representation_module = mod
+  end
+
+  def self.internals
+    @internal_representation_module || Hamsterdam::Hamster
+  end
+
+  def self.from_ruby_hash(h)
+    internals.from_ruby_hash(h)
+  end
+
+  def self.internal_hash_class
+    internals.internal_hash_class
+  end
+
+  def self.empty_hash
+    internals.empty_hash
+  end
+
+  def self.empty_set
+    internals.empty_set
+  end
+
+  def self.empty_list
+    internals.empty_list
+  end
+
+  def self.equal_hashes?(hash1, hash2)
+    internals.equal_hashes?(hash1, hash2)
+  end
+
+  def self.symbolize_keys(hash)
+    internals.symbolize_keys(hash)
   end
 
   class Struct
@@ -26,8 +98,8 @@ module Hamsterdam
 
       end
 
-      struct_class.instance_variable_set(:@field_names, Hamster.set(*field_names))
-      struct_class.instance_variable_set(:@field_names_list, Hamster.list(*field_names))
+      struct_class.instance_variable_set(:@field_names, ::Hamster.set(*field_names))
+      struct_class.instance_variable_set(:@field_names_list, ::Hamster.list(*field_names))
       class << struct_class 
         def field_names
           if !@field_names.nil?
@@ -47,9 +119,9 @@ module Hamsterdam
       struct_class
     end
 
-    def initialize(values=Hamster.hash, validate=true)
+    def initialize(values=Hamsterdam.empty_hash, validate=true)
       if validate
-        @data = flesh_out(ensure_hamster_hash(values))
+        @data = flesh_out(ensure_expected_hash(values))
         validate_keys(@data)
       else
         @data = values
@@ -57,11 +129,11 @@ module Hamsterdam
     end
 
     def merge(values)
-      self.class.new(@data.merge(ensure_hamster_hash(values)))
+      self.class.new(@data.merge(ensure_expected_hash(values)))
     end
 
     def ==(other)
-      @data == other.to_hamster_hash
+      Hamsterdam.equal_hashes?(@data, other.internal_hash)
     end
 
     def eql?(other)
@@ -72,7 +144,7 @@ module Hamsterdam
       @data.hash
     end
 
-    def to_hamster_hash
+    def internal_hash
       @data
     end
 
@@ -82,7 +154,7 @@ module Hamsterdam
 
     def to_s
       name = self.class.name ? self.class.name.split(/::/).last : self.class.to_s
-      data = to_hamster_hash
+      data = internal_hash
       fields = self.class.field_names_list.map { |fname| "#{fname}: #{data[fname].inspect}" }
       "<#{([name]+fields).join(" ")}>"
     end
@@ -96,14 +168,14 @@ module Hamsterdam
       end
     end
 
-    def ensure_hamster_hash(h)
+    def ensure_expected_hash(h)
       case h
       when Hash
-        Hamster.hash(h)
-      when Hamster::Hash
+        Hamsterdam.from_ruby_hash(h)
+      when Hamsterdam.internal_hash_class
         h
       else
-        raise "Expected Hash or Hamster::Hash. Do not want: #{h.inspect}"
+        raise "Expected Hash or #{Hamsterdam.internal_hash_class}. Do not want: #{h.inspect}"
       end
     end
 
@@ -120,13 +192,7 @@ module Hamsterdam
     end
 
     def symbolize_keys(data)
-      data.reduce(data) do |memo,k,v|
-        if Symbol === k
-          memo
-        else
-          memo.delete(k).put(k.to_sym, v)
-        end
-      end
+      Hamsterdam.symbolize_keys(data)
     end
   end
 end
