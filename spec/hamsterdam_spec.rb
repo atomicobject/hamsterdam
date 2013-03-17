@@ -8,7 +8,6 @@ describe "Hamsterdam structures" do
   let(:struct_class) { define_hamsterdam_struct(:top, :bottom) }
 
   describe "Struct.define" do
-    puts Hamsterdam.internal_hash_class
 
     it "creates a structure class based on the given fields" do
       struct = struct_class.new(top: 200, bottom: "all the way down")

@@ -1,12 +1,7 @@
 # Monkey patch clojure maps to have some of the same interface as Hamster hashes
 class Java::ClojureLang::PersistentHashMap
-  def put(key, val)
-    assoc(key, val)
-  end
-
-  def delete(key)
-    without(key)
-  end
+  alias_method :put, :assoc
+  alias_method :delete, :without
 end
 
 module Hamsterdam

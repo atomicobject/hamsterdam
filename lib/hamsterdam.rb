@@ -147,6 +147,7 @@ module Hamsterdam
     def internal_hash
       @data
     end
+    alias_method :to_hamster_hash, :internal_hash
 
     def inspect
       to_s
