@@ -1,4 +1,7 @@
 Hamsterdam v1.0.5
+  * Added hamsterdam/clj to allow for optionally using the Clojure PersistentHashMap isntead of a Hamster hash as the backing data structure
+
+Hamsterdam v1.0.5
   * Setters return the same instance of the object if the value being set is unchanged
   * Optimized creation of a new struct caused by a setter modification by skipping validation
 	* (v1.0.3 and 1.0.4 skipped because of github repo tagging conflict)

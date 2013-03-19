@@ -7,6 +7,53 @@ describe "Hamsterdam structures" do
 
   let(:struct_class) { define_hamsterdam_struct(:top, :bottom) }
 
+  describe "immutable data structure helpers" do
+    describe "#hash" do
+      it "provides an empty hash" do
+        h = Hamsterdam.hash
+        h.should be_empty
+        h.class.should == Hamsterdam.internal_hash_class
+        h.should == Hamsterdam.hash
+      end
+
+      it "provides a hash populated with passed in key/values" do
+        h = Hamsterdam.hash(a: "1", b: "2")
+        h[:a].should == "1"
+        h[:b].should == "2"
+        h.class.should == Hamsterdam.internal_hash_class
+      end
+    end
+
+    describe "#set" do
+      it "provides an empty set" do
+        s = Hamsterdam.set
+        s.should be_empty
+      end
+
+      it "provides a set populated with passed values" do
+        s = Hamsterdam.set("a", "b", "c", "a")
+        s.should_not be_empty
+        s.should have(3).entries
+        s.should include("a", "b", "c")
+      end
+    end
+
+    describe "#list" do
+      it "provides an empty list" do
+        l = Hamsterdam.list
+        l.should be_empty
+      end
+
+      it "provides a list populated with passed values" do
+        l = Hamsterdam.list("a", "b", "c", "a")
+        l.should_not be_empty
+        l.should have(4).items
+        l.should include("a", "b", "c")
+        l.to_a.should == ["a", "b", "c", "a"]
+      end
+    end
+  end
+
   describe "Struct.define" do
 
     it "creates a structure class based on the given fields" do
@@ -17,7 +64,7 @@ describe "Hamsterdam structures" do
     end
 
     it "can be built with underlying persistent data structure hashes hashes" do
-      struct = struct_class.new(Hamsterdam.from_ruby_hash(top: 10, bottom: "low"))
+      struct = struct_class.new(Hamsterdam.hash(top: 10, bottom: "low"))
       struct.should be
       struct.top.should == 10
       struct.bottom.should == "low"
@@ -41,7 +88,7 @@ describe "Hamsterdam structures" do
 
     it "provides access to the internal data as the correct hash type" do
       s1 = struct_class.new(top: 50, bottom: 75)
-      s1.internal_hash.should == Hamsterdam.from_ruby_hash(top: 50, bottom: 75)
+      s1.internal_hash.should == Hamsterdam.hash(top: 50, bottom: 75)
     end
 
     it "raises helpful error when constructed with invalid objects" do
@@ -99,15 +146,15 @@ describe "Hamsterdam structures" do
       s1 = struct_class.new(top: 50, bottom: nil)
       s2 = struct_class.new(top: 50)
       # binding.pry
-      s1.eql?(s2).should == true
       (s1 == s2).should == true
+      s1.eql?(s2).should == true
       s1.should == s2
     end
   end
 
   it "uses the same #hash as the underlying data structure" do
     s1 = struct_class.new(top: 50, bottom: 75)
-    s1.hash.should == Hamsterdam.from_ruby_hash(top:50, bottom:75).hash
+    s1.hash.should == Hamsterdam.hash(top:50, bottom:75).hash
   end
 
   describe "transformation" do
@@ -144,7 +191,7 @@ describe "Hamsterdam structures" do
     it "can merge-in a non-ruby hash" do
       struct = struct_class.new(top: 10, bottom: 1)
 
-      struct2 = struct.merge(Hamsterdam.from_ruby_hash(bottom: "newer", top: "newest"))
+      struct2 = struct.merge(Hamsterdam.hash(bottom: "newer", top: "newest"))
       struct2.top.should == "newest"
       struct2.bottom.should == "newer"
 
@@ -211,7 +258,7 @@ describe "Hamsterdam structures" do
       val.foo.should == 3
       val.bar.should == 4
 
-      val.internal_hash.should == Hamsterdam.from_ruby_hash(foo: 3, bar: 4)
+      val.internal_hash.should == Hamsterdam.hash(foo: 3, bar: 4)
     end
   end
 end

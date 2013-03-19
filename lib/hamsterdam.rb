@@ -3,28 +3,21 @@ require 'hamster'
 module Hamsterdam
 
   module Hamster
-    def self.from_ruby_hash(h)
-      ::Hamster.hash(h)
+
+    def self.hash(*hash)
+      ::Hamster.hash(*hash)
+    end
+
+    def self.set(*values)
+      ::Hamster.set(*values)
+    end
+
+    def self.list(*values)
+      ::Hamster.list(*values)
     end
 
     def self.internal_hash_class
       ::Hamster::Hash
-    end
-
-    def self.empty_hash
-      ::Hamster.hash
-    end
-
-    def self.empty_set
-      ::Hamster.set
-    end
-
-    def self.empty_list
-      ::Hamster.list
-    end
-
-    def self.equal_hashes?(hash1, hash2)
-      hash1 == hash2
     end
 
     def self.symbolize_keys(hash)
@@ -47,31 +40,23 @@ module Hamsterdam
   end
 
   def self.internals
-    @internal_representation_module || Hamsterdam::Hamster
+    @internal_representation_module
   end
 
-  def self.from_ruby_hash(h)
-    internals.from_ruby_hash(h)
+  def self.hash(*hash)
+    internals.hash(*hash)
+  end
+
+  def self.set(*values)
+    internals.set(*values)
+  end
+
+  def self.list(*values)
+    internals.list(*values)
   end
 
   def self.internal_hash_class
     internals.internal_hash_class
-  end
-
-  def self.empty_hash
-    internals.empty_hash
-  end
-
-  def self.empty_set
-    internals.empty_set
-  end
-
-  def self.empty_list
-    internals.empty_list
-  end
-
-  def self.equal_hashes?(hash1, hash2)
-    internals.equal_hashes?(hash1, hash2)
   end
 
   def self.symbolize_keys(hash)
@@ -95,11 +80,10 @@ module Hamsterdam
             end
           end
         end
-
       end
 
-      struct_class.instance_variable_set(:@field_names, ::Hamster.set(*field_names))
-      struct_class.instance_variable_set(:@field_names_list, ::Hamster.list(*field_names))
+      struct_class.instance_variable_set(:@field_names, Hamsterdam.set(*field_names))
+      struct_class.instance_variable_set(:@field_names_list, Hamsterdam.list(*field_names))
       class << struct_class 
         def field_names
           if !@field_names.nil?
@@ -119,7 +103,7 @@ module Hamsterdam
       struct_class
     end
 
-    def initialize(values=Hamsterdam.empty_hash, validate=true)
+    def initialize(values=Hamsterdam.hash, validate=true)
       if validate
         @data = flesh_out(ensure_expected_hash(values))
         validate_keys(@data)
@@ -133,7 +117,7 @@ module Hamsterdam
     end
 
     def ==(other)
-      Hamsterdam.equal_hashes?(@data, other.internal_hash)
+      internal_hash == other.internal_hash
     end
 
     def eql?(other)
@@ -163,7 +147,7 @@ module Hamsterdam
     private
     def validate_keys(data)
       valid_keys = self.class.field_names
-      bad_keys = data.keys - valid_keys
+      bad_keys = data.keys - valid_keys.to_a
       if bad_keys.any?
         raise "#{self.class.name || "Anonymous Hamsterdam::Struct"} can't be constructed with #{bad_keys.inspect}. Valid keys: #{valid_keys.inspect}"
       end
@@ -172,7 +156,7 @@ module Hamsterdam
     def ensure_expected_hash(h)
       case h
       when Hash
-        Hamsterdam.from_ruby_hash(h)
+        Hamsterdam.hash(h)
       when Hamsterdam.internal_hash_class
         h
       else
@@ -197,3 +181,4 @@ module Hamsterdam
     end
   end
 end
+Hamsterdam.internals = Hamsterdam::Hamster
