@@ -150,6 +150,13 @@ describe "Hamsterdam structures" do
       s1.eql?(s2).should == true
       s1.should == s2
     end
+
+    it "can be compared to nil" do
+      s1 = struct_class.new(top: 50, bottom: 75)
+      s1.eql?(nil).should be_false
+      (s1 == nil).should be_false
+      s1.should_not == nil
+    end
   end
 
   it "uses the same #hash as the underlying data structure" do

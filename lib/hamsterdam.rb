@@ -117,7 +117,8 @@ module Hamsterdam
     end
 
     def ==(other)
-      internal_hash == other.internal_hash
+      !other.nil? &&
+        internal_hash == other.internal_hash
     end
 
     def eql?(other)
