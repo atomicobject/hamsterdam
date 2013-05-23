@@ -157,6 +157,13 @@ describe "Hamsterdam structures" do
       (s1 == nil).should be_false
       s1.should_not == nil
     end
+
+    it "can be compared to non structs" do
+      s1 = struct_class.new(top: 50, bottom: 75)
+      s1.eql?(:foo).should be_false
+      (s1 == :foo).should be_false
+      s1.should_not == :foo
+    end
   end
 
   it "uses the same #hash as the underlying data structure" do

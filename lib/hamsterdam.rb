@@ -118,6 +118,7 @@ module Hamsterdam
 
     def ==(other)
       !other.nil? &&
+        other.respond_to?(:internal_hash) &&
         internal_hash == other.internal_hash
     end
 
