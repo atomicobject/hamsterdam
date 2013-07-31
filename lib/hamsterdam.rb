@@ -112,6 +112,19 @@ module Hamsterdam
       end
     end
 
+    def self.safe_create(values=Hamsterdam.hash)
+      h = field_names.inject(Hamsterdam.hash) do |memo, field_name|
+        if values.has_key?(field_name)
+          memo.put(field_name, values[field_name])
+        elsif values.has_key?(field_name.to_s)
+          memo.put(field_name.to_s, values[field_name.to_s])
+        else
+          memo
+        end
+      end
+      new(h)
+    end
+
     def merge(values)
       self.class.new(@data.merge(ensure_expected_hash(values)))
     end
@@ -167,7 +180,6 @@ module Hamsterdam
     end
 
     def flesh_out(data)
-      # binding.pry
       fnames = self.class.field_names
       data = symbolize_keys(data)
       miss = fnames - data.keys

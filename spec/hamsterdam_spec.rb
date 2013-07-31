@@ -63,7 +63,7 @@ describe "Hamsterdam structures" do
       struct.bottom.should == "all the way down"
     end
 
-    it "can be built with underlying persistent data structure hashes hashes" do
+    it "can be built with underlying persistent data structure hashes" do
       struct = struct_class.new(Hamsterdam.hash(top: 10, bottom: "low"))
       struct.should be
       struct.top.should == 10
@@ -273,6 +273,30 @@ describe "Hamsterdam structures" do
       val.bar.should == 4
 
       val.internal_hash.should == Hamsterdam.hash(foo: 3, bar: 4)
+    end
+  end
+
+  describe "alternate constructor method that ignores invalid keys (vs raising an error)" do
+    let(:the_struct) { Hamsterdam::Struct.define(:foo, :bar) }
+
+    it "ignores unknown keys" do
+      val = the_struct.safe_create(:foo => "the foo", "bar" => "the bar", :baz => "the baz")
+      val.foo.should == "the foo"
+      val.bar.should == "the bar"
+
+      val.internal_hash.should == Hamsterdam.hash(foo: "the foo", bar: "the bar")
+    end
+
+    it "does not require anything be passed" do
+      val = the_struct.safe_create
+      val.foo.should be_nil
+      val.bar.should be_nil
+    end
+
+    it "can be built with underlying persistent data structure hashes" do
+      val = the_struct.safe_create(Hamsterdam.hash(no: "ye", foo: "the foo"))
+      val.foo.should == "the foo"
+      val.bar.should be_nil
     end
   end
 end
