@@ -29,4 +29,5 @@ begin # protect from missing rspec
   end
 
 rescue Exception => e
+  puts "Maybe missing rspec gem?"
 end

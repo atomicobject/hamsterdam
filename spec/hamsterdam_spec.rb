@@ -52,6 +52,21 @@ describe "Hamsterdam structures" do
         l.to_a.should == ["a", "b", "c", "a"]
       end
     end
+
+    describe "#queue" do
+      it "provides an empty queue" do
+        q = Hamsterdam.queue
+        q.should be_empty
+      end
+
+      it "provides a queue populated with passed values" do
+        q = Hamsterdam.queue("a", "b", "c", "d")
+        q.should_not be_empty
+        q.should have(4).items
+        q.peek.should == "a"
+        q.dequeue.to_a.should == ["b", "c", "d"]
+      end
+    end
   end
 
   describe "Struct.define" do

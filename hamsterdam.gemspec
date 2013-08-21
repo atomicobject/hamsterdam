@@ -3,8 +3,8 @@ $LOAD_PATH << File.expand_path(File.dirname(__FILE__) + "/lib")
 require "hamsterdam/version"
 
 Gem::Specification.new do |gem|
-  gem.authors       = ["David Crosby"]
-  gem.email         = ["david.crosby@atomicobject.com"]
+  gem.authors       = ["David Crosby", "Patrick Bacon"]
+  gem.email         = ["david.crosby@atomicobject.com", "bacon@atomicobject.com"]
   gem.description   = %q{Immutable Struct-like record structures based on Hamster.}
   gem.summary       = %q{Immutable Struct-like record structures based on Hamster.}
   gem.homepage      = "https://github.com/atomicobject/hamsterdam"

@@ -16,6 +16,10 @@ module Hamsterdam
       ::Hamster.list(*values)
     end
 
+    def self.queue(*values)
+      ::Hamster.queue(*values)
+    end
+
     def self.internal_hash_class
       ::Hamster::Hash
     end
@@ -53,6 +57,10 @@ module Hamsterdam
 
   def self.list(*values)
     internals.list(*values)
+  end
+
+  def self.queue(*values)
+    internals.queue(*values)
   end
 
   def self.internal_hash_class
