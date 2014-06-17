@@ -1,3 +1,0 @@
-rvm_gemset_create_on_use_flag=1
-# rvm 1.9.3@hamsterdam
-rvm jruby-1.7.0@hamsterdam
