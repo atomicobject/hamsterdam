@@ -33,7 +33,7 @@ describe "Hamsterdam structures" do
       it "provides a set populated with passed values" do
         s = Hamsterdam.set("a", "b", "c", "a")
         s.should_not be_empty
-        s.should have(3).entries
+        expect(s.size).to eq(3)
         s.should include("a", "b", "c")
       end
     end
@@ -47,7 +47,7 @@ describe "Hamsterdam structures" do
       it "provides a list populated with passed values" do
         l = Hamsterdam.list("a", "b", "c", "a")
         l.should_not be_empty
-        l.should have(4).items
+        expect(l.size).to eq(4)
         l.should include("a", "b", "c")
         l.to_a.should == ["a", "b", "c", "a"]
       end
@@ -62,7 +62,7 @@ describe "Hamsterdam structures" do
       it "provides a queue populated with passed values" do
         q = Hamsterdam.queue("a", "b", "c", "d")
         q.should_not be_empty
-        q.should have(4).items
+        q.size.should eq(4)
         q.peek.should == "a"
         q.dequeue.to_a.should == ["b", "c", "d"]
       end
@@ -107,7 +107,7 @@ describe "Hamsterdam structures" do
     end
 
     it "raises helpful error when constructed with invalid objects" do
-      lambda do struct_class.new("LAWDY") end.should raise_error /Do not want.*LAWDY/
+      lambda do struct_class.new("LAWDY") end.should raise_error(/Do not want.*LAWDY/)
     end
 
     describe "inheritance-based definition" do
@@ -168,15 +168,15 @@ describe "Hamsterdam structures" do
 
     it "can be compared to nil" do
       s1 = struct_class.new(top: 50, bottom: 75)
-      s1.eql?(nil).should be_false
-      (s1 == nil).should be_false
+      s1.eql?(nil).should be false
+      (s1 == nil).should be false
       s1.should_not == nil
     end
 
     it "can be compared to non structs" do
       s1 = struct_class.new(top: 50, bottom: 75)
-      s1.eql?(:foo).should be_false
-      (s1 == :foo).should be_false
+      s1.eql?(:foo).should be false
+      (s1 == :foo).should be false
       s1.should_not == :foo
     end
   end
