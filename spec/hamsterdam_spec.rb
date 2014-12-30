@@ -63,7 +63,7 @@ describe "Hamsterdam structures" do
         q = Hamsterdam.queue("a", "b", "c", "d")
         q.should_not be_empty
         q.size.should eq(4)
-        q.peek.should == "a"
+        q.first.should == "a"
         q.dequeue.to_a.should == ["b", "c", "d"]
       end
     end
