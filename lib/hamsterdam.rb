@@ -17,7 +17,7 @@ module Hamsterdam
     end
 
     def self.queue(*values)
-      ::Hamster.queue(*values)
+      ::Hamster.deque(*values)
     end
 
     def self.internal_hash_class
@@ -25,7 +25,7 @@ module Hamsterdam
     end
 
     def self.symbolize_keys(hash)
-      hash.reduce(hash) do |memo,k,v|
+      hash.reduce(hash) do |memo, (k, v)|
         if Symbol === k
           memo
         else
