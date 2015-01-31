@@ -7,6 +7,16 @@ module Hamsterdam
     Set = Java::ClojureLang::PersistentHashSet
     Queue = Java::ClojureLang::PersistentQueue
 
+    #
+    # As of Java 8, PersistentHashMap#merge throws ArgumentError: wrong number of arguments (1 for 3).
+    # Converting away Clojure map via #to_hash, then merging, then re-Clojuring it seems to bypass this issue.
+    #
+    class Hash
+      def merge(a)
+        Hamsterdam.hash(to_hash.merge(a))
+      end
+    end
+
     def self.hash(h = nil)
       if h.nil?
         Hash::EMPTY
