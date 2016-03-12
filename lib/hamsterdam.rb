@@ -5,19 +5,19 @@ module Hamsterdam
   module Hamster
 
     def self.hash(*hash)
-      ::Hamster.hash(*hash)
+      ::Hamster::Hash[*hash]
     end
 
     def self.set(*values)
-      ::Hamster.set(*values)
+      ::Hamster::Set[*values]
     end
 
     def self.list(*values)
-      ::Hamster.list(*values)
+      ::Hamster::List[*values]
     end
 
     def self.queue(*values)
-      ::Hamster.deque(*values)
+      ::Hamster::Deque[*values]
     end
 
     def self.internal_hash_class
@@ -25,11 +25,13 @@ module Hamsterdam
     end
 
     def self.symbolize_keys(hash)
-      hash.reduce(hash) do |memo, (k, v)|
-        if Symbol === k
+      hash.entries.reduce(hash) do |memo, entry|
+        key = entry.first
+        value = entry.last
+        if Symbol === key
           memo
         else
-          memo.delete(k).put(k.to_sym, v)
+          memo.delete(key).put(key.to_sym, value)
         end
       end
     end
@@ -203,4 +205,31 @@ module Hamsterdam
     end
   end
 end
+
+module Hamster
+  class Hash
+    def inspect
+      to_hash.to_s.gsub(/=>/, " => ")
+    end
+  end
+
+  module List
+    def inspect
+      to_a.inspect
+    end
+  end
+
+  class Set
+    def inspect
+      to_a.inspect.sub(/^\[/, "{").sub(/\]$/, "}")
+    end
+  end
+
+  class Deque
+    def inspect
+      to_a.inspect
+    end
+  end
+end
+
 Hamsterdam.internals = Hamsterdam::Hamster

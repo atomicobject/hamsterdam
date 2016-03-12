@@ -15,7 +15,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = Hamsterdam::VERSION
 
-  gem.add_dependency "hamster"
+  gem.add_dependency "hamster", [">= 3.0"]
   gem.add_development_dependency "rake"
   gem.add_development_dependency "rspec"
   gem.add_development_dependency "simplecov"

@@ -1,3 +1,6 @@
+Hamsterdam v1.0.11
+  * Updates to be compatible with Hamster 3.0 (doesn't work with older versions). No longer works with Ruby 1.9 due to a dependency of Hamster 3.0.
+
 Hamsterdam v1.0.5
   * Added hamsterdam/clj to allow for optionally using the Clojure PersistentHashMap isntead of a Hamster hash as the backing data structure
 

@@ -5,3 +5,4 @@ tags
 pkg
 /README.html
 Gemfile.lock
+vendor/bundle
